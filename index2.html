@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歡修行扭蛋機</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 星星背景動畫 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* 流星效果 */
+        .shooting-star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, transparent, white, transparent);
+            animation: shoot 3s linear infinite;
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(-100px) translateY(-100px) rotate(45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(500px) translateY(500px) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        .gashapon-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.5),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .title {
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 
+                0 0 10px rgba(255, 255, 255, 0.5),
+                0 0 20px rgba(255, 255, 255, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3); }
+            to { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5); }
+        }
+
+        .instruction {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        /* 新版扭蛋機設計 */
+        .gashapon-machine {
+            position: relative;
+            width: 320px;
+            height: 450px;
+            margin: 0 auto 20px;
+            perspective: 1000px;
+        }
+
+        .machine-body {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 30px;
+            position: relative;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                inset 0 2px 5px rgba(255, 255, 255, 0.2);
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .machine-body:hover {
+            transform: rotateY(5deg) rotateX(-5deg);
+        }
+
+        /* 玻璃球艙 */
+        .glass-sphere {
+            width: 220px;
+            height: 220px;
+            position: absolute;
+            top: 30px;
+            left: 50px;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.1), transparent 50%),
+                linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            box-shadow: 
+                inset 0 0 30px rgba(255, 255, 255, 0.1),
+                0 0 20px rgba(100, 200, 255, 0.3);
+            animation: sphere-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes sphere-glow {
+            0%, 100% { box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.1), 0 0 20px rgba(100, 200, 255, 0.3); }
+            50% { box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.2), 0 0 30px rgba(100, 200, 255, 0.5); }
+        }
+
+        /* 漂浮的扭蛋 */
+        .floating-capsules {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            animation: rotate-capsules 20s linear infinite;
+        }
+
+        @keyframes rotate-capsules {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .floating-capsule {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 
+                inset 0 -5px 10px rgba(0, 0, 0, 0.3),
+                0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(120deg); }
+            66% { transform: translateY(5px) rotate(240deg); }
+        }
+
+        .floating-capsule:nth-child(1) { 
+            background: linear-gradient(145deg, #ff6b6b, #ff5252); 
+            top: 20%; left: 45%;
+            animation-delay: 0s;
+        }
+        .floating-capsule:nth-child(2) { 
+            background: linear-gradient(145deg, #4ecdc4, #44a39b); 
+            top: 35%; left: 25%;
+            animation-delay: 0.5s;
+        }
+        .floating-capsule:nth-child(3) { 
+            background: linear-gradient(145deg, #45b7d1, #3a9bb3); 
+            top: 35%; left: 65%;
+            animation-delay: 1s;
+        }
+        .floating-capsule:nth-child(4) { 
+            background: linear-gradient(145deg, #f9ca24, #f0b90b); 
+            top: 55%; left: 30%;
+            animation-delay: 1.5s;
+        }
+        .floating-capsule:nth-child(5) { 
+            background: linear-gradient(145deg, #a29bfe, #8b82fe); 
+            top: 55%; left: 60%;
+            animation-delay: 2s;
+        }
+        .floating-capsule:nth-child(6) { 
+            background: linear-gradient(145deg, #fd79a8, #fc5c95); 
+            top: 70%; left: 45%;
+            animation-delay: 2.5s;
+        }
+
+        /* 發光轉動把手 */
+        .cosmic-handle {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            right: -50px;
+            top: 160px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .handle-outer {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%, #ffd700, #ffed4e);
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.5),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.5), inset 0 -3px 6px rgba(0, 0, 0, 0.2);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 50px rgba(255, 215, 0, 0.8), inset 0 -3px 6px rgba(0, 0, 0, 0.2);
+                transform: scale(1.05);
+            }
+        }
+
+        .handle-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            z-index: 2;
+        }
+
+        .cosmic-handle:hover .handle-outer {
+            transform: scale(1.1);
+        }
+
+        .cosmic-handle.spinning {
+            animation: super-spin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes super-spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(360deg) scale(1.2); }
+            100% { transform: rotate(720deg) scale(1); }
+        }
+
+        /* 震動效果 */
+        .machine-body.shaking {
+            animation: mega-shake 2s ease-in-out;
+        }
+
+        @keyframes mega-shake {
+            0%, 100% { transform: translateX(0) rotateZ(0deg); }
+            10% { transform: translateX(-5px) rotateZ(-1deg); }
+            20% { transform: translateX(5px) rotateZ(1deg); }
+            30% { transform: translateX(-5px) rotateZ(-1deg); }
+            40% { transform: translateX(5px) rotateZ(1deg); }
+            50% { transform: translateX(-3px) rotateZ(-0.5deg); }
+            60% { transform: translateX(3px) rotateZ(0.5deg); }
+            70% { transform: translateX(-2px) rotateZ(-0.3deg); }
+            80% { transform: translateX(2px) rotateZ(0.3deg); }
+            90% { transform: translateX(-1px) rotateZ(0deg); }
+        }
+
+        /* 扭蛋掉落動畫 */
+        .capsule-drop {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 75px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0;
+            animation: drop 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        @keyframes drop {
+            0% {
+                transform: translateX(-50%) translateY(-300px) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(-150px) rotate(180deg);
+            }
+            70% {
+                transform: translateX(-50%) translateY(10px) rotate(270deg);
+            }
+            85% {
+                transform: translateX(-50%) translateY(-5px) rotate(340deg);
+            }
+            100% {
+                transform: translateX(-50%) translateY(0) rotate(360deg);
+                opacity: 1;
+            }
+        }
+
+        /* 出口槽 */
+        .exit-slot {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 60px;
+            background: linear-gradient(180deg, #1a1a1a, #2c2c2c);
+            border-radius: 10px 10px 20px 20px;
+            box-shadow: 
+                inset 0 5px 10px rgba(0, 0, 0, 0.5),
+                0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 結果展示區 */
+        .result-area {
+            margin-top: 20px;
+            min-height: 150px;
+            position: relative;
+        }
+
+        .result-capsule {
+            width: 120px;
+            height: 150px;
+            margin: 0 auto;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+            transform: scale(0);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.4),
+                inset 0 -5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-capsule.show {
+            transform: scale(1);
+            animation: victory-spin 1s ease-out;
+        }
+
+        @keyframes victory-spin {
+            0% { transform: scale(0) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+
+        .result-capsule.opening {
+            animation: capsule-open 1s ease-out forwards;
+        }
+
+        @keyframes capsule-open {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(10deg); }
+            100% { transform: scale(1.2) rotate(0deg); }
+        }
+
+        .result-number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 
+                0 0 20px currentColor,
+                0 0 40px currentColor;
+            opacity: 0;
+            animation: number-reveal 0.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes number-reveal {
+            0% { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) scale(0);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.3);
+            }
+            100% { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* 重置按鈕 */
+        .reset-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .reset-btn.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* 光環效果 */
+        .light-burst {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .light-burst.active {
+            animation: burst 1s ease-out;
+        }
+
+        @keyframes burst {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(3);
+            }
+        }
+
+        .light-ray {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, white, transparent);
+            top: 50%;
+            left: 0;
+            transform-origin: center;
+        }
+
+        .light-ray:nth-child(1) { transform: rotate(0deg); }
+        .light-ray:nth-child(2) { transform: rotate(30deg); }
+        .light-ray:nth-child(3) { transform: rotate(60deg); }
+        .light-ray:nth-child(4) { transform: rotate(90deg); }
+        .light-ray:nth-child(5) { transform: rotate(120deg); }
+        .light-ray:nth-child(6) { transform: rotate(150deg); }
+
+        /* Modal 樣式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+            animation: modal-fade 0.3s ease-out;
+        }
+
+        @keyframes modal-fade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0);
+            animation: modal-pop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        @keyframes modal-pop {
+            0% { transform: scale(0) rotate(-10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .modal-header {
+            margin: -30px -30px 20px -30px;
+            padding: 20px 30px;
+            border-radius: 17px 17px 0 0;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+            color: white;
+        }
+
+        .modal-body {
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+
+        .modal-message {
+            font-style: italic;
+            color: #2c3e50;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .encouragement {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        /* 特定 Modal 樣式 */
+        .chance-modal .modal-content {
+            border: 3px solid #27ae60;
+            box-shadow: 0 20px 60px rgba(39, 174, 96, 0.3);
+        }
+
+        .chance-modal .modal-header {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .chance-modal .modal-message {
+            background: #e8f5e8;
+            border-left: 4px solid #27ae60;
+        }
+
+        .chance-modal .encouragement {
+            color: #27ae60;
+            border: 2px solid #27ae60;
+        }
+
+        .chance-modal .btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .destiny-modal .modal-content {
+            border: 3px solid #8e44ad;
+            box-shadow: 0 20px 60px rgba(142, 68, 173, 0.3);
+        }
+
+        .destiny-modal .modal-header {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+        }
+
+        .destiny-modal .modal-message {
+            background: #f4f1f8;
+            border-left: 4px solid #8e44ad;
+        }
+
+        .destiny-modal .encouragement {
+            color: #8e44ad;
+            border: 2px solid #8e44ad;
+        }
+
+        .destiny-modal .btn {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+        }
+
+        .mahayana-modal .modal-content {
+            border: 3px solid #d35400;
+            box-shadow: 0 20px 60px rgba(211, 84, 0, 0.3);
+        }
+
+        .mahayana-modal .modal-header {
+            background: linear-gradient(135deg, #d35400, #e67e22);
+        }
+
+        .mahayana-modal .modal-message {
+            background: #f8f9fa;
+            border-left: 4px solid #d35400;
+        }
+
+        .mahayana-modal .btn {
+            background: linear-gradient(135deg, #d35400, #e67e22);
+        }
+
+        /* ============================================= */
+        /* == 手機版面適應 (Mobile Responsive Styles) == */
+        /* ============================================= */
+        @media (max-width: 540px) {
+            body {
+                /* 防止水平滾動條出現 */
+                overflow-x: hidden; 
+                padding: 10px;
+            }
+
+            .gashapon-container {
+                /* 減少邊距讓內容區域更大 */
+                padding: 20px 15px; 
+            }
+
+            .title {
+                /* 調整標題大小 */
+                font-size: 28px; 
+            }
+
+            .instruction {
+                font-size: 14px;
+            }
+
+            .gashapon-machine {
+                /* 將整個扭蛋機等比例縮小以適應螢幕 */
+                transform: scale(0.85);
+                /* 縮放後會產生多餘的空白，用負邊距來修正 */
+                margin-top: -30px;
+                margin-bottom: -40px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="gashapon-container">
+        <h1 class="title">✨ 歡修行扭蛋機 ✨</h1>
+        <p class="instruction">點擊黃金轉盤，開啟您的幸運之旅！</p>
+        
+        <div class="gashapon-machine">
+            <div class="machine-body" id="machineBody">
+                <div class="glass-sphere">
+                    <div class="floating-capsules">
+                        <div class="floating-capsule"></div>
+                        <div class="floating-capsule"></div>
+                        <div class="floating-capsule"></div>
+                        <div class="floating-capsule"></div>
+                        <div class="floating-capsule"></div>
+                        <div class="floating-capsule"></div>
+                    </div>
+                </div>
+                
+                <div class="cosmic-handle" id="cosmicHandle">
+                    <div class="handle-outer">
+                        <span class="handle-text">轉動</span>
+                    </div>
+                </div>
+                
+                <div class="exit-slot"></div>
+                
+                <!-- 光環效果 -->
+                <div class="light-burst" id="lightBurst">
+                    <div class="light-ray"></div>
+                    <div class="light-ray"></div>
+                    <div class="light-ray"></div>
+                    <div class="light-ray"></div>
+                    <div class="light-ray"></div>
+                    <div class="light-ray"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-area">
+            <div class="result-capsule" id="resultCapsule">
+                <div class="result-number" id="resultNumber"></div>
+            </div>
+            <button class="reset-btn" id="resetBtn">🎲 再次祈福</button>
+        </div>
+    </div>
+
+    <!-- 法母二十七訊 Modal -->
+    <div id="chanceModal" class="modal chance-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💫 法母十七訊</h3>
+            </div>
+            <div class="modal-body">
+                <div class="modal-message" id="chanceMessage">
+                    正在獲取法母指引...
+                </div>
+                <div class="encouragement">
+                    🌟 恭喜中獎！今天就朝著這個美好的方向邁進吧！
+                </div>
+            </div>
+            <button class="btn" id="closeChanceBtn">
+                感恩接受
+            </button>
+        </div>
+    </div>
+
+    <!-- 拔苦代受銘訊 Modal -->
+    <div id="destinyModal" class="modal destiny-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💜 拔苦代受銘訊</h3>
+            </div>
+            <div class="modal-body">
+                <div class="modal-message" id="destinyMessage">
+                    正在獲取靈性指引...
+                </div>
+                <div class="encouragement">
+                    ✨ 中獎是福報的體現！讓我們以這份指引開啟美好的一天！
+                </div>
+            </div>
+            <button class="btn" id="closeDestinyBtn">
+                感恩接受
+            </button>
+        </div>
+    </div>
+
+    <!-- 大乘之道 Modal -->
+    <div id="mahayanaModal" class="modal mahayana-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📿 大乘之道</h3>
+            </div>
+            <div class="modal-body">
+                <p style="font-weight: bold; color: #d35400; font-size: 1.2em; margin-bottom: 15px;">
+                    您的功德累積不足，請作大乘利他之修行
+                </p>
+                <hr style="margin: 20px 0; border: none; border-top: 2px solid #ecf0f1;">
+                <div class="modal-message" id="mahayanaMessage">
+                    正在獲取修行指引...
+                </div>
+            </div>
+            <button class="btn" id="closeMahayanaBtn">
+                遵循教誨
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 全局變數
+        const motherMessagesSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSEWDc6xiRT1fIynaHGScq18jeolq6GNp4Xdyp-UtH7BfG198FTeSBMC3_WImR8ZFqZCHX4r7hQf0UW/pub?gid=0&single=true&output=csv';
+        const bakudaishouSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTQp08ZcC5kK1DRs8jE0FYXwmFLh5wXTxJZgdjuOK8s_UIcovZaqKqJhRIAa-Qz3yh5O80cs55euiKp/pub?gid=0&single=true&output=csv';
+        const mahayanaSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsbivmJSOlSU040kBg0FLr7MglWgV8GFGBpRBuCRah36LH__sp8fgfzHiASonM5d74ysM7qIY9EbL/pub?gid=0&single=true&output=csv';
+        
+        let motherMessagesData = [];
+        let bakudaishouData = [];
+        let mahayanaData = [];
+        let isSpinning = false;
+
+        // 創建星星背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+            
+            // 添加流星
+            for (let i = 0; i < 3; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.className = 'shooting-star';
+                shootingStar.style.left = Math.random() * 100 + '%';
+                shootingStar.style.top = Math.random() * 50 + '%';
+                shootingStar.style.animationDelay = Math.random() * 5 + 's';
+                starsContainer.appendChild(shootingStar);
+            }
+        }
+
+        // 載入抽籤資料的通用函數
+        async function fetchSheetData(url, dataArray, fallbackMessage) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network error');
+                const text = await response.text();
+                
+                // 解析 CSV 格式，跳過標題行
+                const lines = text.split('\n');
+                const messages = [];
+                
+                for (let i = 1; i < lines.length; i++) { // 從第二行開始（跳過標題）
+                    const line = lines[i].trim();
+                    if (line && line !== '') {
+                        // 移除可能的引號
+                        const cleanLine = line.replace(/^"|"$/g, '').replace(/\r/g, '');
+                        if (cleanLine) {
+                            messages.push(cleanLine);
+                        }
+                    }
+                }
+                
+                console.log(`載入了 ${messages.length} 條訊息從:`, url);
+                
+                if (messages.length > 0) {
+                    dataArray.length = 0;
+                    dataArray.push(...messages);
+                } else {
+                    console.log('使用預設訊息');
+                    dataArray.push(fallbackMessage);
+                }
+            } catch (error) {
+                console.error('無法載入資料:', url, error);
+                dataArray.push(fallbackMessage);
+            }
+        }
+
+        // 載入所有資料
+        function loadAllData() {
+            fetchSheetData(motherMessagesSheetUrl, motherMessagesData, "祝福與您同在。");
+            fetchSheetData(bakudaishouSheetUrl, bakudaishouData, "上天慈悲，您的苦厄已被分擔。");
+            fetchSheetData(mahayanaSheetUrl, mahayanaData, "您的功德金不夠,今天請做大乘利他奉侍修行");
+        }
+
+        // 主要扭蛋旋轉函數
+        function spinGashapon() {
+            console.log('扭蛋機被點擊了！');
+            
+            if (isSpinning) {
+                console.log('正在旋轉中，忽略點擊');
+                return;
+            }
+            
+            isSpinning = true;
+            console.log('開始旋轉動畫');
+            
+            const handle = document.getElementById('cosmicHandle');
+            const machineBody = document.getElementById('machineBody');
+            const resultCapsule = document.getElementById('resultCapsule');
+            const resultNumber = document.getElementById('resultNumber');
+            const resetBtn = document.getElementById('resetBtn');
+            const lightBurst = document.getElementById('lightBurst');
+            
+            // 重置之前的狀態
+            resultCapsule.classList.remove('show', 'opening');
+            resetBtn.classList.remove('show');
+            
+            // 開始動畫
+            handle.classList.add('spinning');
+            machineBody.classList.add('shaking');
+            
+            // 1.5秒後創建掉落的扭蛋
+            setTimeout(() => {
+                console.log('開始掉落動畫');
+                
+                const dropCapsule = document.createElement('div');
+                dropCapsule.className = 'capsule-drop';
+                
+                // 生成隨機數字 1-10
+                const randomNumber = Math.floor(Math.random() * 10) + 1;
+                console.log('隨機數字:', randomNumber);
+                
+                // 根據數字選擇顏色和類型
+                let capsuleColor;
+                let actionType;
+                
+                if (randomNumber >= 1 && randomNumber <= 3) {
+                    capsuleColor = 'linear-gradient(145deg, #27ae60, #2ecc71)';
+                    actionType = 'mother';
+                } else if (randomNumber >= 4 && randomNumber <= 7) {
+                    capsuleColor = 'linear-gradient(145deg, #8e44ad, #9b59b6)';
+                    actionType = 'destiny';
+                } else {
+                    capsuleColor = 'linear-gradient(145deg, #d35400, #e67e22)';
+                    actionType = 'mahayana';
+                }
+                
+                console.log('選擇的類型:', actionType);
+                
+                dropCapsule.style.background = capsuleColor;
+                machineBody.appendChild(dropCapsule);
+                
+                // 掉落動畫結束後
+                setTimeout(() => {
+                    console.log('掉落動畫結束');
+                    
+                    // 移除掉落的扭蛋
+                    dropCapsule.remove();
+                    
+                    // 顯示結果扭蛋
+                    resultCapsule.style.background = capsuleColor;
+                    resultNumber.textContent = randomNumber;
+                    resultCapsule.classList.add('show');
+                    
+                    // 光環效果
+                    lightBurst.classList.add('active');
+                    
+                    // 0.5秒後打開扭蛋
+                    setTimeout(() => {
+                        console.log('打開扭蛋');
+                        resultCapsule.classList.add('opening');
+                        
+                        // 顯示重置按鈕
+                        setTimeout(() => {
+                            resetBtn.classList.add('show');
+                            
+                            // 顯示對應的 Modal
+                            console.log('顯示 Modal:', actionType);
+                            if (actionType === 'mother') {
+                                showChanceModal();
+                            } else if (actionType === 'destiny') {
+                                showDestinyModal();
+                            } else {
+                                showMahayanaModal();
+                            }
+                        }, 500);
+                    }, 500);
+                    
+                    // 移除光環效果
+                    setTimeout(() => {
+                        lightBurst.classList.remove('active');
+                    }, 1000);
+                    
+                }, 1000);
+            }, 1500);
+            
+            // 2秒後停止機器動畫
+            setTimeout(() => {
+                console.log('停止機器動畫');
+                handle.classList.remove('spinning');
+                machineBody.classList.remove('shaking');
+                isSpinning = false;
+            }, 2000);
+        }
+
+        // 重置函數
+        function reset() {
+            console.log('重置扭蛋機');
+            
+            const resultCapsule = document.getElementById('resultCapsule');
+            const resultNumber = document.getElementById('resultNumber');
+            const resetBtn = document.getElementById('resetBtn');
+            
+            // 淡出效果
+            resultCapsule.classList.remove('show', 'opening');
+            resetBtn.classList.remove('show');
+            
+            // 清空數字
+            setTimeout(() => {
+                resultNumber.textContent = '';
+                resultCapsule.style.background = '';
+            }, 300);
+        }
+
+        // Modal 相關函數
+        function showChanceModal() {
+            console.log('顯示法母二十七訊 Modal');
+            
+            const modal = document.getElementById('chanceModal');
+            const chanceMessage = document.getElementById('chanceMessage');
+            
+            console.log('法母二十七訊資料數量:', motherMessagesData.length);
+            
+            if (motherMessagesData.length > 0) {
+                const randomIndex = Math.floor(Math.random() * motherMessagesData.length);
+                const selectedMessage = motherMessagesData[randomIndex];
+                console.log('選中的訊息:', selectedMessage);
+                chanceMessage.innerHTML = selectedMessage;
+            } else {
+                chanceMessage.innerHTML = "祝福與您同在。";
+            }
+            
+            modal.classList.add('show');
+            modal.style.display = 'flex';
+        }
+
+        function closeChanceModal() {
+            const modal = document.getElementById('chanceModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function showDestinyModal() {
+            console.log('顯示拔苦代受銘訊 Modal');
+            
+            const modal = document.getElementById('destinyModal');
+            const destinyMessage = document.getElementById('destinyMessage');
+            
+            console.log('拔苦代受銘訊資料數量:', bakudaishouData.length);
+            
+            if (bakudaishouData.length > 0) {
+                const randomIndex = Math.floor(Math.random() * bakudaishouData.length);
+                const selectedMessage = bakudaishouData[randomIndex];
+                console.log('選中的訊息:', selectedMessage);
+                destinyMessage.innerHTML = selectedMessage;
+            } else {
+                destinyMessage.innerHTML = "上天慈悲，您的苦厄已被分擔。";
+            }
+            
+            modal.classList.add('show');
+            modal.style.display = 'flex';
+        }
+
+        function closeDestinyModal() {
+            const modal = document.getElementById('destinyModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function showMahayanaModal() {
+            console.log('顯示大乘之道 Modal');
+            
+            const modal = document.getElementById('mahayanaModal');
+            const mahayanaMessage = document.getElementById('mahayanaMessage');
+            
+            console.log('大乘之道資料數量:', mahayanaData.length);
+            
+            if (mahayanaData.length > 0) {
+                const randomIndex = Math.floor(Math.random() * mahayanaData.length);
+                const selectedMessage = mahayanaData[randomIndex];
+                console.log('選中的訊息:', selectedMessage);
+                mahayanaMessage.innerHTML = selectedMessage;
+            } else {
+                mahayanaMessage.innerHTML = "您的功德金不夠,今天請做大乘利他奉侍修行";
+            }
+            
+            modal.classList.add('show');
+            modal.style.display = 'flex';
+        }
+
+        function closeMahayanaModal() {
+            const modal = document.getElementById('mahayanaModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        // 初始化 - 頁面載入時執行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('頁面載入完成，開始初始化');
+            
+            createStars();
+            loadAllData();
+            
+            // 綁定點擊事件
+            const cosmicHandle = document.getElementById('cosmicHandle');
+            if (cosmicHandle) {
+                console.log('找到轉動把手，綁定點擊事件');
+                cosmicHandle.addEventListener('click', spinGashapon);
+            } else {
+                console.error('找不到轉動把手元素');
+            }
+            
+            const resetBtn = document.getElementById('resetBtn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', reset);
+            }
+            
+            // 綁定 Modal 關閉按鈕
+            document.getElementById('closeChanceBtn').addEventListener('click', closeChanceModal);
+            document.getElementById('closeDestinyBtn').addEventListener('click', closeDestinyModal);
+            document.getElementById('closeMahayanaBtn').addEventListener('click', closeMahayanaModal);
+            
+            // 添加一些隨機的漂浮動畫
+            setInterval(() => {
+                if (!isSpinning) {
+                    const capsules = document.querySelectorAll('.floating-capsule');
+                    const randomCapsule = capsules[Math.floor(Math.random() * capsules.length)];
+                    
+                    // 暫時加速旋轉
+                    randomCapsule.style.animation = 'float 1s ease-in-out infinite';
+                    
+                    setTimeout(() => {
+                        randomCapsule.style.animation = 'float 3s ease-in-out infinite';
+                    }, 1000);
+                }
+            }, 5000);
+            
+            // 點擊 Modal 外部關閉
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('show');
+                        setTimeout(() => {
+                            modal.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+            
+            console.log('初始化完成');
+        });
+    </script>
+</body>
+</html>
