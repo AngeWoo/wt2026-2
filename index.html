@@ -533,6 +533,7 @@
             margin: -30px -30px 20px -30px;
             padding: 20px 30px;
             border-radius: 17px 17px 0 0;
+            background: linear-gradient(135deg, #d35400, #e67e22);
         }
 
         .modal-header h3 {
@@ -552,18 +553,12 @@
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 15px;
-        }
-
-        .encouragement { /* 此處的文字將被移除，但樣式仍保留 */
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: bold;
-            margin-top: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #d35400;
         }
 
         .btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #d35400, #e67e22);
             color: white;
             border: none;
             padding: 12px 30px;
@@ -581,73 +576,13 @@
         }
 
         /* 特定 Modal 樣式 */
-        /* 以下兩個 Modal 現在不會被直接使用，但保留樣式以防萬一 */
-        .chance-modal .modal-content {
-            border: 3px solid #27ae60;
-            box-shadow: 0 20px 60px rgba(39, 174, 96, 0.3);
-        }
-
-        .chance-modal .modal-header {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-        }
-
-        .chance-modal .modal-message {
-            background: #e8f5e8;
-            border-left: 4px solid #27ae60;
-        }
-
-        .chance-modal .encouragement {
-            color: #27ae60;
-            border: 2px solid #27ae60;
-        }
-
-        .chance-modal .btn {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-        }
-
-        .destiny-modal .modal-content {
-            border: 3px solid #8e44ad;
-            box-shadow: 0 20px 60px rgba(142, 68, 173, 0.3);
-        }
-
-        .destiny-modal .modal-header {
-            background: linear-gradient(135deg, #8e44ad, #9b59b6);
-        }
-
-        .destiny-modal .modal-message {
-            background: #f4f1f8;
-            border-left: 4px solid #8e44ad;
-        }
-
-        .destiny-modal .encouragement {
-            color: #8e44ad;
-            border: 2px solid #8e44ad;
-        }
-
-        .destiny-modal .btn {
-            background: linear-gradient(135deg, #8e44ad, #9b59b6);
-        }
-
         .mahayana-modal .modal-content {
             border: 3px solid #d35400;
             box-shadow: 0 20px 60px rgba(211, 84, 0, 0.3);
         }
 
-        .mahayana-modal .modal-header {
-            background: linear-gradient(135deg, #d35400, #e67e22);
-        }
-
-        .mahayana-modal .modal-message {
-            background: #f8f9fa;
-            border-left: 4px solid #d35400;
-        }
-
-        .mahayana-modal .btn {
-            background: linear-gradient(135deg, #d35400, #e67e22);
-        }
-
         /* ============================================= */
-        /* == 手機版面適應 (Mobile Responsive Styles) == */
+        /* == 手機版響應式 (Mobile Responsive Styles) == */
         /* ============================================= */
         @media (max-width: 540px) {
             body {
@@ -726,51 +661,295 @@
             <div class="result-capsule" id="resultCapsule">
                 <div class="result-number" id="resultNumber"></div>
             </div>
-            <button class="reset-btn" id="resetBtn">🎲 再次祈福</button>
+            <button class="reset-btn" id="resetBtn">🎲 再次祈禱</button>
         </div>
     </div>
 
-    <!-- 法母二十七訊 Modal (不再直接使用，但保留元素) -->
-    <div id="chanceModal" class="modal chance-modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>💫 法母十七訊</h3>
-            </div>
-            <div class="modal-body">
-                <div class="modal-message" id="chanceMessage">
-                    訊息已統一由大乘之道提供
-                </div>
-                <!-- 移除 "恭喜中獎！今天就朝著這個美好的方向邁進吧！" -->
-            </div>
-            <button class="btn" id="closeChanceBtn">
-                感恩接受
-            </button>
-        </div>
-    </div>
-
-    <!-- 拔苦代受銘訊 Modal (不再直接使用，但保留元素) -->
-    <div id="destinyModal" class="modal destiny-modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>💜 拔苦代受銘訊</h3>
-            </div>
-            <div class="modal-body">
-                <div class="modal-message" id="destinyMessage">
-                    訊息已統一由大乘之道提供
-                </div>
-                <!-- 移除 "中獎是福報的體現！讓我們以這份指引開啟美好的一天！" -->
-            </div>
-            <button class="btn" id="closeDestinyBtn">
-                感恩接受
-            </button>
-        </div>
-    </div>
-
-    <!-- 大乘之道 Modal (所有結果都將使用這個 Modal) -->
+    <!-- 大乘之道 Modal -->
     <div id="mahayanaModal" class="modal mahayana-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>📿 大乘之道</h3>
             </div>
             <div class="modal-body">
-                <p style="font-weight: bold; color
+                <div class="modal-message" id="mahayanaMessage">
+                    正在獲取修行指引...
+                </div>
+            </div>
+            <button class="btn" id="closeMahayanaBtn">
+                遵循教誨
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 全域變數
+        const mahayanaSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsbivmJSOlSU040kBg0FLr7MglWgV8GFGBpRBuCRah36LH__sp8fgfzHiASonM5d74ysM7qIY9EbL/pub?gid=0&single=true&output=csv';
+        
+        let mahayanaData = [];
+        let isSpinning = false;
+
+        // 創建星星背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+            
+            // 添加流星
+            for (let i = 0; i < 3; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.className = 'shooting-star';
+                shootingStar.style.left = Math.random() * 100 + '%';
+                shootingStar.style.top = Math.random() * 50 + '%';
+                shootingStar.style.animationDelay = Math.random() * 5 + 's';
+                starsContainer.appendChild(shootingStar);
+            }
+        }
+
+        // 載入抽籤資料的通用函數
+        async function fetchSheetData(url, dataArray, fallbackMessage) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network error');
+                const text = await response.text();
+                
+                // 解析 CSV 格式，跳過標題行
+                const lines = text.split('\n');
+                const messages = [];
+                
+                for (let i = 1; i < lines.length; i++) { // 從第二行開始（跳過標題）
+                    const line = lines[i].trim();
+                    if (line && line !== '') {
+                        // 移除可能的引號
+                        const cleanLine = line.replace(/^"|"$/g, '').replace(/\r/g, '');
+                        if (cleanLine) {
+                            messages.push(cleanLine);
+                        }
+                    }
+                }
+                
+                console.log(`載入了 ${messages.length} 條訊息從:`, url);
+                
+                if (messages.length > 0) {
+                    dataArray.length = 0;
+                    dataArray.push(...messages);
+                } else {
+                    console.log('使用預設訊息');
+                    dataArray.push(fallbackMessage);
+                }
+            } catch (error) {
+                console.error('無法載入資料:', url, error);
+                dataArray.push(fallbackMessage);
+            }
+        }
+
+        // 載入所有資料
+        function loadAllData() {
+            fetchSheetData(mahayanaSheetUrl, mahayanaData, "您的功德金不足,今天請做大乘利他奉獻修行");
+        }
+
+        // 主要扭蛋旋轉函數
+        function spinGashapon() {
+            console.log('扭蛋機被點擊了！');
+            
+            if (isSpinning) {
+                console.log('正在旋轉中，忽略點擊');
+                return;
+            }
+            
+            isSpinning = true;
+            console.log('開始旋轉動畫');
+            
+            const handle = document.getElementById('cosmicHandle');
+            const machineBody = document.getElementById('machineBody');
+            const resultCapsule = document.getElementById('resultCapsule');
+            const resultNumber = document.getElementById('resultNumber');
+            const resetBtn = document.getElementById('resetBtn');
+            const lightBurst = document.getElementById('lightBurst');
+            
+            // 重置之前的狀態
+            resultCapsule.classList.remove('show', 'opening');
+            resetBtn.classList.remove('show');
+            
+            // 開始動畫
+            handle.classList.add('spinning');
+            machineBody.classList.add('shaking');
+            
+            // 1.5秒後創建掉落的扭蛋
+            setTimeout(() => {
+                console.log('開始掉落動畫');
+                
+                const dropCapsule = document.createElement('div');
+                dropCapsule.className = 'capsule-drop';
+                
+                // 生成隨機數字 1-10
+                const randomNumber = Math.floor(Math.random() * 10) + 1;
+                console.log('隨機數字:', randomNumber);
+                
+                // 所有扭蛋都統一使用橙色系顏色和大乘之道訊息
+                const capsuleColor = 'linear-gradient(145deg, #d35400, #e67e22)';
+                const actionType = 'mahayana';
+                
+                console.log('選擇的類型:', actionType);
+                
+                dropCapsule.style.background = capsuleColor;
+                machineBody.appendChild(dropCapsule);
+                
+                // 掉落動畫結束後
+                setTimeout(() => {
+                    console.log('掉落動畫結束');
+                    
+                    // 移除掉落的扭蛋
+                    dropCapsule.remove();
+                    
+                    // 顯示結果扭蛋
+                    resultCapsule.style.background = capsuleColor;
+                    resultNumber.textContent = randomNumber;
+                    resultCapsule.classList.add('show');
+                    
+                    // 光環效果
+                    lightBurst.classList.add('active');
+                    
+                    // 0.5秒後打開扭蛋
+                    setTimeout(() => {
+                        console.log('打開扭蛋');
+                        resultCapsule.classList.add('opening');
+                        
+                        // 顯示重置按鈕
+                        setTimeout(() => {
+                            resetBtn.classList.add('show');
+                            
+                            // 顯示大乘之道 Modal
+                            console.log('顯示 Modal:', actionType);
+                            showMahayanaModal();
+                        }, 500);
+                    }, 500);
+                    
+                    // 移除光環效果
+                    setTimeout(() => {
+                        lightBurst.classList.remove('active');
+                    }, 1000);
+                    
+                }, 1000);
+            }, 1500);
+            
+            // 2秒後停止機器動畫
+            setTimeout(() => {
+                console.log('停止機器動畫');
+                handle.classList.remove('spinning');
+                machineBody.classList.remove('shaking');
+                isSpinning = false;
+            }, 2000);
+        }
+
+        // 重置函數
+        function reset() {
+            console.log('重置扭蛋機');
+            
+            const resultCapsule = document.getElementById('resultCapsule');
+            const resultNumber = document.getElementById('resultNumber');
+            const resetBtn = document.getElementById('resetBtn');
+            
+            // 淡出效果
+            resultCapsule.classList.remove('show', 'opening');
+            resetBtn.classList.remove('show');
+            
+            // 清空數字
+            setTimeout(() => {
+                resultNumber.textContent = '';
+                resultCapsule.style.background = '';
+            }, 300);
+        }
+
+        // Modal 相關函數
+        function showMahayanaModal() {
+            console.log('顯示大乘之道 Modal');
+            
+            const modal = document.getElementById('mahayanaModal');
+            const mahayanaMessage = document.getElementById('mahayanaMessage');
+            
+            console.log('大乘之道資料數量:', mahayanaData.length);
+            
+            if (mahayanaData.length > 0) {
+                const randomIndex = Math.floor(Math.random() * mahayanaData.length);
+                const selectedMessage = mahayanaData[randomIndex];
+                console.log('選中的訊息:', selectedMessage);
+                mahayanaMessage.innerHTML = selectedMessage;
+            } else {
+                mahayanaMessage.innerHTML = "您的功德金不足,今天請做大乘利他奉獻修行";
+            }
+            
+            modal.classList.add('show');
+            modal.style.display = 'flex';
+        }
+
+        function closeMahayanaModal() {
+            const modal = document.getElementById('mahayanaModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        // 初始化 - 頁面載入時執行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('頁面載入完成，開始初始化');
+            
+            createStars();
+            loadAllData();
+            
+            // 綁定點擊事件
+            const cosmicHandle = document.getElementById('cosmicHandle');
+            if (cosmicHandle) {
+                console.log('找到轉動把手，綁定點擊事件');
+                cosmicHandle.addEventListener('click', spinGashapon);
+            } else {
+                console.error('找不到轉動把手元素');
+            }
+            
+            const resetBtn = document.getElementById('resetBtn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', reset);
+            }
+            
+            // 綁定 Modal 關閉按鈕
+            document.getElementById('closeMahayanaBtn').addEventListener('click', closeMahayanaModal);
+            
+            // 添加一些隨機的漂浮動畫
+            setInterval(() => {
+                if (!isSpinning) {
+                    const capsules = document.querySelectorAll('.floating-capsule');
+                    const randomCapsule = capsules[Math.floor(Math.random() * capsules.length)];
+                    
+                    // 暫時加速旋轉
+                    randomCapsule.style.animation = 'float 1s ease-in-out infinite';
+                    
+                    setTimeout(() => {
+                        randomCapsule.style.animation = 'float 3s ease-in-out infinite';
+                    }, 1000);
+                }
+            }, 5000);
+            
+            // 點擊 Modal 外部關閉
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('show');
+                        setTimeout(() => {
+                            modal.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+            
+            console.log('初始化完成');
+        });
+    </script>
+</body>
+</html>
