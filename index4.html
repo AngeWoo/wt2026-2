@@ -616,7 +616,7 @@
     <!-- Modal -->
     <div class="cyber-modal" id="cyberModal">
         <div class="modal-content">
-            <h3 class="modal-title">⚡ 系統訊息 ⚡</h3>
+            <h3 class="modal-title">⚡ 大乘之道 ⚡</h3>
             <div class="modal-message" id="modalMessage">
                 正在連接量子伺服器...
             </div>
@@ -625,26 +625,48 @@
     </div>
     
     <script>
-        // 資料載入
-        const messages = [
-            "量子糾纏已建立，您的命運正在重新編碼...",
-            "神經網路同步完成，意識上傳中...",
-            "時空座標已鎖定，準備進行維度跳躍...",
-            "數據流異常檢測：發現幸運值溢出...",
-            "賽博空間連接成功，正在下載今日運勢...",
-            "AI預言系統啟動，分析您的未來路徑...",
-            "霓虹之夢載入中，現實與虛擬邊界模糊...",
-            "記憶體碎片整理完成，新的可能性已解鎖...",
-            "量子隨機數生成器啟動，命運重新洗牌...",
-            "系統提示：您已進入高維度幸運領域...",
-            "數位靈魂掃描中，檢測到異常強大的運氣場...",
-            "平行宇宙連線成功，最佳時間線已選定...",
-            "區塊鏈認證完成，您的幸運已永久記錄...",
-            "虛擬實境校準中，準備進入夢境維度...",
-            "量子演算法運行完畢，最優解已找到..."
-        ];
+        // Google Sheet URL
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsbivmJSOlSU040kBg0FLr7MglWgV8GFGBpRBuCRah36LH__sp8fgfzHiASonM5d74ysM7qIY9EbL/pub?gid=0&single=true&output=csv';
         
+        // 存儲從Google Sheet載入的訊息
+        let sheetMessages = [];
         let isActivated = false;
+        
+        // 載入Google Sheet資料
+        async function loadSheetData() {
+            try {
+                const response = await fetch(sheetUrl);
+                if (!response.ok) throw new Error('Network error');
+                const text = await response.text();
+                
+                // 解析 CSV 格式，跳過標題行
+                const lines = text.split('\n');
+                const messages = [];
+                
+                for (let i = 1; i < lines.length; i++) { // 從第二行開始（跳過標題）
+                    const line = lines[i].trim();
+                    if (line && line !== '') {
+                        // 移除可能的引號
+                        const cleanLine = line.replace(/^"|"$/g, '').replace(/\r/g, '');
+                        if (cleanLine) {
+                            messages.push(cleanLine);
+                        }
+                    }
+                }
+                
+                console.log(`載入了 ${messages.length} 條訊息`);
+                
+                if (messages.length > 0) {
+                    sheetMessages = messages;
+                } else {
+                    console.log('使用預設訊息');
+                    sheetMessages = ["您的功德金不足，今天請做大乘利他奉獻修行"];
+                }
+            } catch (error) {
+                console.error('無法載入資料:', error);
+                sheetMessages = ["您的功德金不足，今天請做大乘利他奉獻修行"];
+            }
+        }
         
         // 創建粒子爆炸效果
         function createParticleBurst(x, y) {
@@ -703,9 +725,9 @@
                     resultNumber.textContent = randomNum;
                     resultContent.classList.add('show');
                     
-                    // 顯示Modal
+                    // 直接顯示Google Sheet的訊息
                     setTimeout(() => {
-                        showModal();
+                        showSheetMessage();
                     }, 500);
                     
                     // 重置狀態
@@ -719,12 +741,19 @@
             }, 500);
         }
         
-        // 顯示Modal
-        function showModal() {
+        // 顯示Google Sheet訊息
+        function showSheetMessage() {
             const modal = document.getElementById('cyberModal');
             const message = document.getElementById('modalMessage');
             
-            message.textContent = messages[Math.floor(Math.random() * messages.length)];
+            // 從Google Sheet資料中隨機選擇一條訊息
+            if (sheetMessages.length > 0) {
+                const randomIndex = Math.floor(Math.random() * sheetMessages.length);
+                message.textContent = sheetMessages[randomIndex];
+            } else {
+                message.textContent = "您的功德金不足，今天請做大乘利他奉獻修行";
+            }
+            
             modal.classList.add('show');
         }
         
@@ -742,6 +771,9 @@
         
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
+            // 載入Google Sheet資料
+            loadSheetData();
+            
             // 綁定按鈕事件
             document.getElementById('launchButton').addEventListener('click', activateMachine);
             document.getElementById('closeModalBtn').addEventListener('click', closeModal);
