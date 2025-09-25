@@ -586,31 +586,117 @@
         /* ============================================= */
         @media (max-width: 540px) {
             body {
-                /* 防止水平滾動條出現 */
-                overflow-x: hidden; 
+                /* 防止水平滾動條出現並允許垂直滾動 */
+                overflow-x: hidden;
+                overflow-y: auto;
                 padding: 10px;
+                /* 移除固定高度以避免內容被遮擋 */
+                min-height: auto;
+                align-items: flex-start;
+                padding-top: 20px;
+                padding-bottom: 80px; /* 增加底部空間避免被瀏覽器UI遮擋 */
             }
 
             .gashapon-container {
                 /* 減少邊距讓內容區域更大 */
-                padding: 20px 15px; 
+                padding: 20px 15px 30px 15px; 
+                /* 確保容器不會被螢幕底部遮擋 */
+                margin-bottom: 20px;
             }
 
             .title {
                 /* 調整標題大小 */
-                font-size: 28px; 
+                font-size: 24px; 
+                margin-bottom: 8px;
             }
 
             .instruction {
                 font-size: 14px;
+                margin-bottom: 20px;
             }
 
             .gashapon-machine {
-                /* 將整個扭蛋機等比例縮小以適應螢幕 */
-                transform: scale(0.85);
+                /* 將整個扭蛋機縮小以適應螢幕 */
+                transform: scale(0.75);
                 /* 縮放後會產生多餘的空白，用負邊距來修正 */
-                margin-top: -30px;
-                margin-bottom: -40px;
+                margin-top: -40px;
+                margin-bottom: -60px;
+            }
+
+            .result-area {
+                /* 確保結果區域有足夠空間顯示 */
+                margin-top: 10px;
+                min-height: 120px;
+                /* 添加額外的底部邊距 */
+                margin-bottom: 20px;
+            }
+
+            .result-capsule {
+                /* 稍微縮小結果扭蛋以確保完全可見 */
+                width: 100px;
+                height: 125px;
+            }
+
+            .result-number {
+                /* 調整結果數字大小 */
+                font-size: 40px;
+            }
+
+            .reset-btn {
+                /* 確保重置按鈕有足夠的點擊空間 */
+                padding: 10px 25px;
+                font-size: 14px;
+                margin-top: 15px;
+                margin-bottom: 10px;
+            }
+
+            /* Modal 在手機上的調整 */
+            .modal {
+                padding: 15px;
+                /* 確保Modal不會被鍵盤或瀏覽器UI遮擋 */
+                align-items: flex-start;
+                padding-top: 50px;
+            }
+
+            .modal-content {
+                padding: 25px 20px;
+                max-height: 70vh;
+                width: 95%;
+            }
+
+            .modal-header h3 {
+                font-size: 1.3em;
+            }
+
+            .modal-body {
+                font-size: 1em;
+            }
+
+            .btn {
+                padding: 10px 25px;
+                font-size: 1em;
+            }
+        }
+
+        /* 針對更小的螢幕進一步優化 */
+        @media (max-width: 380px) {
+            .title {
+                font-size: 20px;
+            }
+
+            .gashapon-machine {
+                transform: scale(0.65);
+                margin-top: -50px;
+                margin-bottom: -80px;
+            }
+
+            .result-capsule {
+                width: 90px;
+                height: 110px;
+            }
+
+            .result-number {
+                font-size: 36px;
             }
         }
 
