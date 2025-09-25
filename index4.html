@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEON CAPSULE 2077</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Orbitron', monospace;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 動態網格背景 */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 0, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* 霓虹光暈背景 */
+        .neon-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, 
+                rgba(255, 0, 255, 0.4) 0%, 
+                rgba(0, 255, 255, 0.3) 30%, 
+                transparent 70%);
+            filter: blur(100px);
+            animation: pulse-glow 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        /* 主容器 */
+        .main-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        /* 標題區 */
+        .title-section {
+            text-align: center;
+            position: relative;
+        }
+
+        .main-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: transparent;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: gradient-shift 3s ease infinite;
+            text-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            color: #00ffff;
+            font-size: 14px;
+            letter-spacing: 8px;
+            opacity: 0.8;
+            animation: flicker 2s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+            75% { opacity: 0.6; }
+        }
+
+        /* 3D 扭蛋機容器 */
+        .machine-3d-container {
+            width: 400px;
+            height: 500px;
+            perspective: 1500px;
+            position: relative;
+        }
+
+        /* 中央球體 */
+        .central-sphere {
+            width: 300px;
+            height: 300px;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            transform-style: preserve-3d;
+            animation: rotate-3d 20s linear infinite;
+        }
+
+        @keyframes rotate-3d {
+            0% { transform: rotateY(0deg) rotateX(10deg); }
+            100% { transform: rotateY(360deg) rotateX(10deg); }
+        }
+
+        .sphere-core {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, 
+                rgba(255, 0, 255, 0.3), 
+                rgba(0, 255, 255, 0.2), 
+                transparent);
+            border: 2px solid rgba(255, 0, 255, 0.5);
+            box-shadow: 
+                0 0 50px rgba(255, 0, 255, 0.5),
+                inset 0 0 50px rgba(0, 255, 255, 0.3);
+        }
+
+        /* 軌道環 */
+        .orbit-ring {
+            position: absolute;
+            border: 2px solid;
+            border-radius: 50%;
+            animation: counter-rotate 10s linear infinite;
+        }
+
+        .orbit-ring:nth-child(2) {
+            width: 350px;
+            height: 350px;
+            top: -25px;
+            left: -25px;
+            border-color: rgba(255, 0, 255, 0.3);
+            animation-duration: 15s;
+        }
+
+        .orbit-ring:nth-child(3) {
+            width: 380px;
+            height: 380px;
+            top: -40px;
+            left: -40px;
+            border-color: rgba(0, 255, 255, 0.3);
+            animation-duration: 20s;
+            animation-direction: reverse;
+        }
+
+        @keyframes counter-rotate {
+            0% { transform: rotateZ(0deg); }
+            100% { transform: rotateZ(360deg); }
+        }
+
+        /* 漂浮扭蛋 */
+        .floating-capsule-3d {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            transform-style: preserve-3d;
+        }
+
+        .capsule-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 0, 255, 0.1);
+        }
+
+        .capsule-face:nth-child(1) { transform: translateZ(20px); background: rgba(255, 0, 255, 0.2); }
+        .capsule-face:nth-child(2) { transform: rotateY(180deg) translateZ(20px); background: rgba(0, 255, 255, 0.2); }
+        .capsule-face:nth-child(3) { transform: rotateY(90deg) translateZ(20px); background: rgba(255, 255, 0, 0.2); }
+        .capsule-face:nth-child(4) { transform: rotateY(-90deg) translateZ(20px); background: rgba(0, 255, 0, 0.2); }
+        .capsule-face:nth-child(5) { transform: rotateX(90deg) translateZ(20px); background: rgba(255, 0, 0, 0.2); }
+        .capsule-face:nth-child(6) { transform: rotateX(-90deg) translateZ(20px); background: rgba(0, 0, 255, 0.2); }
+
+        .floating-capsule-3d:nth-child(4) {
+            top: 130px;
+            left: 50px;
+            animation: float-3d-1 8s ease-in-out infinite;
+        }
+
+        .floating-capsule-3d:nth-child(5) {
+            top: 130px;
+            left: 210px;
+            animation: float-3d-2 10s ease-in-out infinite;
+        }
+
+        .floating-capsule-3d:nth-child(6) {
+            top: 50px;
+            left: 130px;
+            animation: float-3d-3 12s ease-in-out infinite;
+        }
+
+        @keyframes float-3d-1 {
+            0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+            50% { transform: translateY(-20px) rotateX(180deg) rotateY(180deg); }
+        }
+
+        @keyframes float-3d-2 {
+            0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+            50% { transform: translateY(20px) rotateX(360deg) rotateY(180deg); }
+        }
+
+        @keyframes float-3d-3 {
+            0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+            50% { transform: translateY(-10px) rotateX(180deg) rotateY(360deg); }
+        }
+
+        /* 全息控制面板 */
+        .control-panel {
+            width: 400px;
+            background: linear-gradient(135deg, 
+                rgba(255, 0, 255, 0.1), 
+                rgba(0, 255, 255, 0.1));
+            border: 2px solid rgba(255, 0, 255, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel-scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.5), 
+                transparent);
+            animation: scan 3s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(200px); }
+        }
+
+        /* 啟動按鈕 */
+        .launch-button {
+            width: 200px;
+            height: 80px;
+            margin: 0 auto;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.3s;
+        }
+
+        .launch-button:hover {
+            transform: translateY(-5px);
+        }
+
+        .button-face {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 0 30px rgba(255, 0, 255, 0.5),
+                inset 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .launch-button.activated .button-face {
+            animation: button-pulse 0.5s ease;
+        }
+
+        @keyframes button-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* 結果顯示區 */
+        .result-display {
+            width: 400px;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-content {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .result-content.show {
+            opacity: 1;
+        }
+
+        .result-number {
+            font-size: 72px;
+            font-weight: 900;
+            color: transparent;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: number-glow 1s ease infinite alternate;
+        }
+
+        @keyframes number-glow {
+            0% { filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.8)); }
+            100% { filter: drop-shadow(0 0 20px rgba(0, 255, 255, 1)); }
+        }
+
+        /* 粒子效果 */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .particle.burst {
+            animation: particle-burst 1s ease-out forwards;
+        }
+
+        @keyframes particle-burst {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* 全息投影效果 */
+        .hologram-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .hologram-effect.active {
+            animation: hologram-appear 2s ease-out;
+        }
+
+        @keyframes hologram-appear {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0) rotateY(0deg);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.5) rotateY(180deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(2) rotateY(360deg);
+            }
+        }
+
+        .holo-ring {
+            position: absolute;
+            border: 2px solid;
+            border-radius: 50%;
+            animation: expand-ring 2s ease-out;
+        }
+
+        .holo-ring:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 50px;
+            left: 50px;
+            border-color: rgba(255, 0, 255, 0.6);
+            animation-delay: 0s;
+        }
+
+        .holo-ring:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 25px;
+            left: 25px;
+            border-color: rgba(0, 255, 255, 0.6);
+            animation-delay: 0.2s;
+        }
+
+        .holo-ring:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            top: 0;
+            left: 0;
+            border-color: rgba(255, 255, 0, 0.6);
+            animation-delay: 0.4s;
+        }
+
+        @keyframes expand-ring {
+            0% {
+                transform: scale(0) rotateZ(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5) rotateZ(180deg);
+                opacity: 0;
+            }
+        }
+
+        /* Modal */
+        .cyber-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .cyber-modal.show {
+            display: flex;
+            animation: modal-fade 0.3s ease-out;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a0033, #0a1628);
+            border: 2px solid rgba(255, 0, 255, 0.5);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 
+                0 0 50px rgba(255, 0, 255, 0.5),
+                inset 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .modal-title {
+            font-size: 28px;
+            color: #00ffff;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .modal-message {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+            font-size: 16px;
+            padding: 20px;
+            background: rgba(255, 0, 255, 0.1);
+            border-radius: 10px;
+            border-left: 3px solid #ff00ff;
+        }
+
+        .close-button {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .close-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 0, 255, 0.5);
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 540px) {
+            .main-title {
+                font-size: 32px;
+            }
+            
+            .machine-3d-container {
+                transform: scale(0.7);
+                margin: -50px 0;
+            }
+            
+            .control-panel,
+            .result-display {
+                width: 90vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 動態網格背景 -->
+    <div class="cyber-grid"></div>
+    
+    <!-- 霓虹光暈 -->
+    <div class="neon-glow"></div>
+    
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 標題區 -->
+        <div class="title-section">
+            <h1 class="main-title">NEON CAPSULE</h1>
+            <p class="subtitle">2077</p>
+        </div>
+        
+        <!-- 3D 扭蛋機 -->
+        <div class="machine-3d-container" id="machine3d">
+            <div class="central-sphere">
+                <div class="sphere-core"></div>
+                <div class="orbit-ring"></div>
+                <div class="orbit-ring"></div>
+                <div class="floating-capsule-3d">
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                </div>
+                <div class="floating-capsule-3d">
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                </div>
+                <div class="floating-capsule-3d">
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                    <div class="capsule-face"></div>
+                </div>
+            </div>
+            
+            <!-- 全息投影效果 -->
+            <div class="hologram-effect" id="hologramEffect">
+                <div class="holo-ring"></div>
+                <div class="holo-ring"></div>
+                <div class="holo-ring"></div>
+            </div>
+        </div>
+        
+        <!-- 控制面板 -->
+        <div class="control-panel">
+            <div class="panel-scanline"></div>
+            <div class="launch-button" id="launchButton">
+                <div class="button-face">ACTIVATE</div>
+            </div>
+        </div>
+        
+        <!-- 結果顯示區 -->
+        <div class="result-display">
+            <div class="result-content" id="resultContent">
+                <div class="result-number" id="resultNumber"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="cyber-modal" id="cyberModal">
+        <div class="modal-content">
+            <h3 class="modal-title">⚡ SYSTEM MESSAGE ⚡</h3>
+            <div class="modal-message" id="modalMessage">
+                正在連接量子服務器...
+            </div>
+            <button class="close-button" id="closeModalBtn">ACKNOWLEDGE</button>
+        </div>
+    </div>
+    
+    <script>
+        // 資料載入
+        const messages = [
+            "量子糾纏已建立，您的命運正在重新編碼...",
+            "神經網路同步完成，意識上傳中...",
+            "時空座標已鎖定，準備進行維度跳躍...",
+            "數據流異常檢測：發現幸運值溢出...",
+            "賽博空間連接成功，正在下載今日運勢...",
+            "AI預言系統啟動，分析您的未來路徑...",
+            "霓虹之夢載入中，現實與虛擬邊界模糊...",
+            "記憶體碎片整理完成，新的可能性已解鎖...",
+            "量子隨機數生成器啟動，命運重新洗牌...",
+            "系統提示：您已進入高維度幸運領域..."
+        ];
+        
+        let isActivated = false;
+        
+        // 創建粒子爆炸效果
+        function createParticleBurst(x, y) {
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle burst';
+                
+                const angle = (Math.PI * 2 * i) / 30;
+                const velocity = 50 + Math.random() * 100;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                particle.style.background = `hsl(${Math.random() * 60 + 280}, 100%, 50%)`;
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
+        
+        // 啟動扭蛋機
+        function activateMachine() {
+            if (isActivated) return;
+            isActivated = true;
+            
+            const button = document.getElementById('launchButton');
+            const machine = document.getElementById('machine3d');
+            const hologram = document.getElementById('hologramEffect');
+            const resultContent = document.getElementById('resultContent');
+            const resultNumber = document.getElementById('resultNumber');
+            
+            // 按鈕動畫
+            button.classList.add('activated');
+            
+            // 創建粒子效果
+            const rect = button.getBoundingClientRect();
+            createParticleBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            
+            // 機器加速旋轉
+            const sphere = machine.querySelector('.central-sphere');
+            sphere.style.animation = 'rotate-3d 1s linear infinite';
+            
+            // 顯示全息效果
+            setTimeout(() => {
+                hologram.classList.add('active');
+                
+                // 生成隨機數字
+                const randomNum = Math.floor(Math.random() * 10) + 1;
+                
+                // 顯示結果
+                setTimeout(() => {
+                    resultNumber.textContent = randomNum;
+                    resultContent.classList.add('show');
+                    
+                    // 顯示Modal
+                    setTimeout(() => {
+                        showModal();
+                    }, 500);
+                    
+                    // 重置狀態
+                    setTimeout(() => {
+                        sphere.style.animation = 'rotate-3d 20s linear infinite';
+                        button.classList.remove('activated');
+                        hologram.classList.remove('active');
+                        isActivated = false;
+                    }, 2000);
+                }, 1500);
+            }, 500);
+        }
+        
+        // 顯示Modal
+        function showModal() {
+            const modal = document.getElementById('cyberModal');
+            const message = document.getElementById('modalMessage');
+            
+            message.textContent = messages[Math.floor(Math.random() * messages.length)];
+            modal.classList.add('show');
+        }
+        
+        // 關閉Modal
+        function closeModal() {
+            const modal = document.getElementById('cyberModal');
+            modal.classList.remove('show');
+            
+            // 清除結果
+            setTimeout(() => {
+                document.getElementById('resultContent').classList.remove('show');
+                document.getElementById('resultNumber').textContent = '';
+            }, 300);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 綁定按鈕事件
+            document.getElementById('launchButton').addEventListener('click', activateMachine);
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            
+            // 點擊Modal外部關閉
+            document.getElementById('cyberModal').addEventListener('click', (e) => {
+                if (e.target.id === 'cyberModal') {
+                    closeModal();
+                }
+            });
+            
+            // 創建隨機閃爍的背景粒子
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = `${x}px`;
+                    particle.style.top = `${y}px`;
+                    particle.style.animation = 'flicker 2s ease-out forwards';
+                    document.body.appendChild(particle);
+                    setTimeout(() => particle.remove(), 2000);
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>
