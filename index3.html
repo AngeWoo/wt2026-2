@@ -479,77 +479,87 @@
         /* 響應式設計 */
         @media (max-width: 600px) {
             body {
-                padding: 15px 15px 100px 15px; /* 增加底部padding避免被遮擋 */
-                justify-content: flex-start; /* 改為從頂部開始排列 */
-                padding-top: 30px;
-                overflow-y: auto; /* 允許垂直滾動 */
+                padding: 20px 15px 80px 15px;
+                justify-content: center; /* 保持居中 */
+                overflow-y: auto;
                 min-height: 100vh;
             }
 
             .main-container {
-                margin-bottom: 50px; /* 增加底部間距 */
-            }
-
-            .wisdom-orb-container {
-                width: 260px;
-                height: 260px;
-                margin-bottom: 20px;
-            }
-
-            .title {
-                font-size: 28px;
-                margin-bottom: 8px;
-            }
-
-            .subtitle {
-                font-size: 14px;
-                margin-bottom: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: calc(100vh - 100px);
             }
 
             .header {
-                margin-bottom: 25px;
+                margin-bottom: 30px;
+                flex-shrink: 0;
+            }
+
+            .title {
+                font-size: 36px; /* 標題字體加大 */
+                margin-bottom: 10px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .wisdom-orb-container {
+                width: 300px; /* 圈圈加大 */
+                height: 300px;
+                margin-bottom: 0; /* 移除底部間距，讓後面元素更靠近 */
+                flex-shrink: 0;
             }
 
             .energy-core {
-                width: 90px;
-                height: 90px;
-                font-size: 14px;
+                width: 110px; /* 核心也相應加大 */
+                height: 110px;
+                font-size: 16px;
             }
 
             .result-container {
-                min-height: 150px;
-                margin: 15px 0;
+                min-height: 180px;
+                margin: 40px 0 30px 0; /* 結果區域往下移動 */
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
             }
 
             .result-card {
-                padding: 20px;
+                padding: 25px 20px;
+                margin-top: 20px; /* 額外向下偏移 */
             }
 
             .result-number {
-                font-size: 50px;
-                margin-bottom: 15px;
+                font-size: 64px; /* 數字稍微大一點 */
+                margin-bottom: 20px;
             }
 
             .result-message {
-                font-size: 14px;
-                padding: 15px;
-                line-height: 1.5;
+                font-size: 16px; /* 文字稍微大一點 */
+                padding: 20px;
+                line-height: 1.6;
             }
 
             .controls {
                 margin-top: 20px;
-                margin-bottom: 30px; /* 確保有足夠底部空間 */
+                flex-shrink: 0;
+                margin-bottom: 20px;
             }
 
             .control-btn {
-                padding: 12px 25px;
-                font-size: 14px;
+                padding: 8px 20px; /* 按鈕變小 */
+                font-size: 13px;   /* 字體變小 */
                 margin: 5px;
             }
 
             .modal-content {
                 padding: 25px 20px;
-                margin: 20px 0; /* 確保modal不會被遮擋 */
+                margin: 20px 0;
             }
 
             .modal-message {
@@ -561,48 +571,79 @@
                 padding: 12px 30px;
                 font-size: 14px;
             }
+
+            /* 能量環相應調整 */
+            .energy-ring:nth-child(1) {
+                width: 320px;
+                height: 320px;
+                top: -10px;
+                left: -10px;
+            }
+
+            .energy-ring:nth-child(2) {
+                width: 280px;
+                height: 280px;
+                top: 10px;
+                left: 10px;
+            }
+
+            .energy-ring:nth-child(3) {
+                width: 240px;
+                height: 240px;
+                top: 30px;
+                left: 30px;
+            }
         }
 
         @media (max-width: 400px) {
-            body {
-                padding: 10px 10px 120px 10px; /* 超小螢幕更多底部空間 */
+            .title {
+                font-size: 32px; /* 超小螢幕稍微縮小一點 */
             }
 
             .wisdom-orb-container {
-                width: 220px;
-                height: 220px;
-            }
-
-            .title {
-                font-size: 24px;
+                width: 280px;
+                height: 280px;
             }
 
             .energy-core {
-                width: 70px;
-                height: 70px;
-                font-size: 12px;
+                width: 100px;
+                height: 100px;
+                font-size: 15px;
             }
 
             .result-number {
-                font-size: 42px;
+                font-size: 56px;
             }
 
             .result-message {
-                font-size: 13px;
+                font-size: 15px;
             }
 
             .control-btn {
-                padding: 10px 20px;
-                font-size: 13px;
+                padding: 7px 18px;
+                font-size: 12px;
             }
-        }
 
-        /* 針對iOS Safari的額外調整 */
-        @supports (-webkit-touch-callout: none) {
-            @media (max-width: 600px) {
-                body {
-                    padding-bottom: 120px; /* iOS Safari需要更多底部空間 */
-                }
+            /* 能量環調整 */
+            .energy-ring:nth-child(1) {
+                width: 300px;
+                height: 300px;
+                top: -10px;
+                left: -10px;
+            }
+
+            .energy-ring:nth-child(2) {
+                width: 260px;
+                height: 260px;
+                top: 10px;
+                left: 10px;
+            }
+
+            .energy-ring:nth-child(3) {
+                width: 220px;
+                height: 220px;
+                top: 30px;
+                left: 30px;
             }
         }
 
