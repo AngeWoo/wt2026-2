@@ -230,14 +230,15 @@
             to { transform: rotate(360deg); }
         }
 
-        /* 結果顯示區 */
-        .result-container {
+        /* 智慧指引顯示區 */
+        .wisdom-display {
             min-height: 200px;
             position: relative;
-            margin: 20px 0;
+            margin: 30px 0 20px 0;
+            width: 100%;
         }
 
-        .result-card {
+        .wisdom-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             border-radius: 20px;
@@ -250,12 +251,12 @@
             overflow: hidden;
         }
 
-        .result-card.show {
+        .wisdom-card.show {
             transform: scale(1);
             opacity: 1;
         }
 
-        .result-card::before {
+        .wisdom-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -266,33 +267,27 @@
             animation: card-shine 2s ease-out;
         }
 
-        @keyframes card-shine {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        .result-number {
-            font-size: 72px;
-            font-weight: 900;
+        .wisdom-header {
+            font-size: 22px;
+            font-weight: 700;
             color: #ffd700;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            text-align: center;
             margin-bottom: 20px;
-            animation: number-glow 2s ease-in-out infinite alternate;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        @keyframes number-glow {
-            from { text-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-            to { text-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
-        }
-
-        .result-message {
+        .wisdom-content {
             font-size: 18px;
-            line-height: 1.6;
+            line-height: 1.7;
             color: white;
             background: rgba(0, 0, 0, 0.2);
-            padding: 20px;
+            padding: 25px;
             border-radius: 15px;
             border-left: 4px solid #ffd700;
+            text-align: left;
         }
 
         /* 控制按鈕 */
@@ -384,97 +379,7 @@
         .energy-beam:nth-child(5) { transform: rotate(120deg); }
         .energy-beam:nth-child(6) { transform: rotate(150deg); }
 
-        /* Modal 重新設計 */
-        .wisdom-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .wisdom-modal.show {
-            display: flex;
-            animation: modal-appear 0.5s ease-out;
-        }
-
-        @keyframes modal-appear {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
-            backdrop-filter: blur(30px);
-            border-radius: 25px;
-            padding: 40px;
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
-            transform: scale(0) rotate(-10deg);
-            animation: modal-pop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-        }
-
-        @keyframes modal-pop {
-            0% { 
-                transform: scale(0) rotate(-10deg); 
-                opacity: 0;
-            }
-            100% { 
-                transform: scale(1) rotate(0deg); 
-                opacity: 1;
-            }
-        }
-
-        .modal-header {
-            font-size: 24px;
-            font-weight: 800;
-            color: #333;
-            margin-bottom: 25px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .modal-message {
-            font-size: 18px;
-            line-height: 1.7;
-            color: #444;
-            background: rgba(103, 126, 234, 0.1);
-            padding: 25px;
-            border-radius: 15px;
-            border-left: 5px solid #667eea;
-            margin-bottom: 30px;
-        }
-
-        .modal-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 15px 35px;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(103, 126, 234, 0.4);
-        }
-
-        .modal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(103, 126, 234, 0.6);
-        }
+        /* 移除不需要的Modal相關樣式 */
 
         /* 響應式設計 */
         @media (max-width: 600px) {
@@ -520,28 +425,28 @@
                 font-size: 16px;
             }
 
-            .result-container {
+            .wisdom-display {
                 min-height: 180px;
-                margin: 40px 0 30px 0; /* 結果區域往下移動 */
+                margin: 40px 0 30px 0;
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
             }
 
-            .result-card {
-                padding: 25px 20px;
-                margin-top: 20px; /* 額外向下偏移 */
+            .wisdom-card {
+                padding: 20px 15px;
+                margin-top: 20px;
             }
 
-            .result-number {
-                font-size: 64px; /* 數字稍微大一點 */
-                margin-bottom: 20px;
+            .wisdom-header {
+                font-size: 18px;
+                margin-bottom: 15px;
             }
 
-            .result-message {
-                font-size: 16px; /* 文字稍微大一點 */
-                padding: 20px;
+            .wisdom-content {
+                font-size: 15px;
+                padding: 18px;
                 line-height: 1.6;
             }
 
@@ -682,28 +587,17 @@
             </div>
         </div>
 
-        <!-- 結果顯示區 -->
-        <div class="result-container">
-            <div class="result-card" id="resultCard">
-                <div class="result-number" id="resultNumber"></div>
-                <div class="result-message" id="resultMessage"></div>
+        <!-- 智慧指引顯示區 -->
+        <div class="wisdom-display" id="wisdomDisplay">
+            <div class="wisdom-card" id="wisdomCard">
+                <div class="wisdom-header">智慧指引</div>
+                <div class="wisdom-content" id="wisdomContent"></div>
             </div>
         </div>
 
         <!-- 控制按鈕 -->
         <div class="controls">
             <button class="control-btn hidden" id="resetBtn">重新感知</button>
-        </div>
-    </div>
-
-    <!-- 智慧指引 Modal -->
-    <div id="wisdomModal" class="wisdom-modal">
-        <div class="modal-content">
-            <div class="modal-header">智慧指引</div>
-            <div class="modal-message" id="modalMessage">
-                正在接收宇宙智慧...
-            </div>
-            <button class="modal-btn" id="closeModalBtn">領悟接受</button>
         </div>
     </div>
 
@@ -788,13 +682,12 @@
             
             const orb = document.getElementById('wisdomOrb');
             const energyBurst = document.getElementById('energyBurst');
-            const resultCard = document.getElementById('resultCard');
-            const resultNumber = document.getElementById('resultNumber');
-            const resultMessage = document.getElementById('resultMessage');
+            const wisdomCard = document.getElementById('wisdomCard');
+            const wisdomContent = document.getElementById('wisdomContent');
             const resetBtn = document.getElementById('resetBtn');
             
             // 重置之前的狀態
-            resultCard.classList.remove('show');
+            wisdomCard.classList.remove('show');
             resetBtn.classList.add('hidden');
             resetBtn.classList.remove('visible');
             
@@ -805,25 +698,24 @@
             setTimeout(() => {
                 energyBurst.classList.add('active');
                 
-                // 生成智慧數字 1-10
-                const wisdomNumber = Math.floor(Math.random() * 10) + 1;
-                
-                // 1秒後顯示結果
+                // 1秒後直接顯示智慧指引
                 setTimeout(() => {
-                    resultNumber.textContent = wisdomNumber;
-                    resultMessage.textContent = "智慧能量已激活，準備接收宇宙指引...";
-                    resultCard.classList.add('show');
+                    // 顯示智慧指引內容
+                    if (mahayanaData.length > 0) {
+                        const randomIndex = Math.floor(Math.random() * mahayanaData.length);
+                        const selectedMessage = mahayanaData[randomIndex];
+                        wisdomContent.innerHTML = selectedMessage;
+                    } else {
+                        wisdomContent.innerHTML = "宇宙的智慧正在向您展現，請用心感受這份指引。";
+                    }
                     
-                    // 再1秒後顯示完整智慧訊息
+                    wisdomCard.classList.add('show');
+                    
+                    // 顯示重新感知按鈕
                     setTimeout(() => {
-                        showWisdomModal();
-                        
-                        // 顯示重新感知按鈕
-                        setTimeout(() => {
-                            resetBtn.classList.remove('hidden');
-                            resetBtn.classList.add('visible');
-                        }, 500);
-                    }, 1000);
+                        resetBtn.classList.remove('hidden');
+                        resetBtn.classList.add('visible');
+                    }, 500);
                     
                 }, 1000);
                 
@@ -841,44 +733,20 @@
             }, 3000);
         }
 
-        // 顯示智慧指引 Modal
-        function showWisdomModal() {
-            const modal = document.getElementById('wisdomModal');
-            const modalMessage = document.getElementById('modalMessage');
-            
-            if (mahayanaData.length > 0) {
-                const randomIndex = Math.floor(Math.random() * mahayanaData.length);
-                const selectedMessage = mahayanaData[randomIndex];
-                modalMessage.innerHTML = selectedMessage;
-            } else {
-                modalMessage.innerHTML = "宇宙的智慧正在向您展現，請用心感受這份指引。";
-            }
-            
-            modal.classList.add('show');
-        }
-
-        // 關閉 Modal
-        function closeWisdomModal() {
-            const modal = document.getElementById('wisdomModal');
-            modal.classList.remove('show');
-        }
-
         // 重置能量球
         function resetWisdomOrb() {
-            const resultCard = document.getElementById('resultCard');
+            const wisdomCard = document.getElementById('wisdomCard');
             const resetBtn = document.getElementById('resetBtn');
-            const resultNumber = document.getElementById('resultNumber');
-            const resultMessage = document.getElementById('resultMessage');
+            const wisdomContent = document.getElementById('wisdomContent');
             
-            // 隱藏結果和按鈕
-            resultCard.classList.remove('show');
+            // 隱藏智慧指引和按鈕
+            wisdomCard.classList.remove('show');
             resetBtn.classList.add('hidden');
             resetBtn.classList.remove('visible');
             
             // 清空內容
             setTimeout(() => {
-                resultNumber.textContent = '';
-                resultMessage.textContent = '';
+                wisdomContent.innerHTML = '';
             }, 300);
         }
 
@@ -892,19 +760,9 @@
             // 綁定事件
             const wisdomOrb = document.getElementById('wisdomOrb');
             const resetBtn = document.getElementById('resetBtn');
-            const closeModalBtn = document.getElementById('closeModalBtn');
-            const modal = document.getElementById('wisdomModal');
             
             wisdomOrb.addEventListener('click', activateWisdomOrb);
             resetBtn.addEventListener('click', resetWisdomOrb);
-            closeModalBtn.addEventListener('click', closeWisdomModal);
-            
-            // Modal 外部點擊關閉
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeWisdomModal();
-                }
-            });
             
             console.log('系統初始化完成');
         });
