@@ -479,58 +479,130 @@
         /* 響應式設計 */
         @media (max-width: 600px) {
             body {
-                padding: 15px;
+                padding: 15px 15px 100px 15px; /* 增加底部padding避免被遮擋 */
+                justify-content: flex-start; /* 改為從頂部開始排列 */
+                padding-top: 30px;
+                overflow-y: auto; /* 允許垂直滾動 */
+                min-height: 100vh;
+            }
+
+            .main-container {
+                margin-bottom: 50px; /* 增加底部間距 */
             }
 
             .wisdom-orb-container {
-                width: 280px;
-                height: 280px;
+                width: 260px;
+                height: 260px;
+                margin-bottom: 20px;
             }
 
             .title {
-                font-size: 32px;
+                font-size: 28px;
+                margin-bottom: 8px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+
+            .header {
+                margin-bottom: 25px;
             }
 
             .energy-core {
-                width: 100px;
-                height: 100px;
-                font-size: 16px;
+                width: 90px;
+                height: 90px;
+                font-size: 14px;
+            }
+
+            .result-container {
+                min-height: 150px;
+                margin: 15px 0;
+            }
+
+            .result-card {
+                padding: 20px;
             }
 
             .result-number {
-                font-size: 60px;
+                font-size: 50px;
+                margin-bottom: 15px;
             }
 
             .result-message {
-                font-size: 16px;
+                font-size: 14px;
                 padding: 15px;
+                line-height: 1.5;
+            }
+
+            .controls {
+                margin-top: 20px;
+                margin-bottom: 30px; /* 確保有足夠底部空間 */
             }
 
             .control-btn {
-                padding: 12px 30px;
+                padding: 12px 25px;
                 font-size: 14px;
                 margin: 5px;
             }
 
             .modal-content {
-                padding: 30px 20px;
+                padding: 25px 20px;
+                margin: 20px 0; /* 確保modal不會被遮擋 */
+            }
+
+            .modal-message {
+                font-size: 16px;
+                padding: 20px;
+            }
+
+            .modal-btn {
+                padding: 12px 30px;
+                font-size: 14px;
             }
         }
 
         @media (max-width: 400px) {
+            body {
+                padding: 10px 10px 120px 10px; /* 超小螢幕更多底部空間 */
+            }
+
             .wisdom-orb-container {
-                width: 240px;
-                height: 240px;
+                width: 220px;
+                height: 220px;
+            }
+
+            .title {
+                font-size: 24px;
             }
 
             .energy-core {
-                width: 80px;
-                height: 80px;
-                font-size: 14px;
+                width: 70px;
+                height: 70px;
+                font-size: 12px;
             }
 
             .result-number {
-                font-size: 48px;
+                font-size: 42px;
+            }
+
+            .result-message {
+                font-size: 13px;
+            }
+
+            .control-btn {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+        }
+
+        /* 針對iOS Safari的額外調整 */
+        @supports (-webkit-touch-callout: none) {
+            @media (max-width: 600px) {
+                body {
+                    padding-bottom: 120px; /* iOS Safari需要更多底部空間 */
+                }
             }
         }
 
